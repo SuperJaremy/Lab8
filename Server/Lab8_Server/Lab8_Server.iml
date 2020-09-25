@@ -7,23 +7,23 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../postgresql-42.2.14.jar!/" />
+          <root url="jar://$USER_HOME$/IdeaProjects/postgresql-42.2.14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../apache-log4j-2.13.3-bin" />
+          <root url="file://$USER_HOME$/IdeaProjects/apache-log4j-2.13.3-bin" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../apache-log4j-2.13.3-bin" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/IdeaProjects/apache-log4j-2.13.3-bin" recursive="false" />
       </library>
     </orderEntry>
   </component>

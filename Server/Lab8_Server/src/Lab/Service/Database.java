@@ -54,7 +54,7 @@ public class Database implements  AutoCloseable{
         try{
             Class.forName("org.postgresql.Driver");
             logger.info("Подключаемся к базе");
-            connection=DriverManager.getConnection("jdbc:postgresql://localhost:15683/MusicBands",
+            connection=DriverManager.getConnection("jdbc:postgresql://pg/studs",
                     username, password);
             logger.info("Подключение к базе получено");
             upload=connection.prepareStatement("SELECT * FROM ((MusicBands INNER " +
