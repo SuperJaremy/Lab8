@@ -38,7 +38,7 @@ public class Database implements  AutoCloseable{
 
     public static boolean authorize(String username, String password){
         try{
-            DriverManager.getConnection("jdbc:postgresql://localhost:15683/MusicBands",
+            DriverManager.getConnection("jdbc:postgresql://pg/studs",
                     username, password);
             Database.username= username;
             Database.password=password;
