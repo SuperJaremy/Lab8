@@ -32,10 +32,10 @@ public class Communicator {
     public void open() throws IOException {
         dcReceiver=DatagramChannel.open();
         dcReceiver.configureBlocking(false);
-        dcReceiver.bind(new InetSocketAddress("localhost",14087));
+        dcReceiver.bind(new InetSocketAddress(InetAddress.getLocalHost(),14087));
         dcSender=DatagramChannel.open();
         dcSender.configureBlocking(false);
-        dcSender.bind(new InetSocketAddress("localhost",14088));
+        dcSender.bind(new InetSocketAddress(InetAddress.getLocalHost(),14088));
         isOpened=true;
     }
     public void close() throws IOException{

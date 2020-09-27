@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Predicate;
 
 
 public class InterfaceWork extends Work {
@@ -60,8 +61,8 @@ public class InterfaceWork extends Work {
     private final Button infoButton = new Button("Info");
     private final Button scriptButton = new Button("Execute script");
     private final Text username = new Text();
-    private final Tab table = new Tab("Table");
-    private final Tab graphics = new Tab("Graphics");
+    private final Tab table = new Tab(locale.getWords().getString("Table"));
+    private final Tab graphics = new Tab(locale.getWords().getString("Graphics"));
     private final GraphicsPane graphicsPane = new GraphicsPane(list);
     private final ComboBox<Language> language = new ComboBox<>();
     private final TextArea messageWindow = new TextArea();
@@ -362,13 +363,29 @@ public class InterfaceWork extends Work {
         columns.setButtonCell(newCellFactory());
         columns.getSelectionModel().select(id);
         filterField.textProperty().addListener(((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(musicBand -> {
-                if(newValue==null||newValue.isEmpty())
-                    return true;
-                String lowerCaseFilter = newValue.toLowerCase();
-                TableColumn<MusicBand,?> selectedItem = columns.getSelectionModel().getSelectedItem();
-                Object data =  selectedItem.getCellData(musicBand);
-                return data != null && data.toString().toLowerCase().contains(lowerCaseFilter);
+            filteredList.setPredicate(new Predicate<MusicBand>() {
+                private boolean findData(TableColumn<MusicBand,?> column, MusicBand mb,
+                                         String newValue){
+                    if(column.getColumns().size()==0) {
+                        Object data = column.getCellData(mb);
+                        return data != null && data.toString().toLowerCase().contains(newValue);
+                    }
+                    else {
+                        boolean contains = false;
+                        for (TableColumn<MusicBand, ?> i : column.getColumns()) {
+                            contains |= findData(i, mb, newValue);
+                        }
+                        return contains;
+                    }
+                }
+                @Override
+                public boolean test(MusicBand musicBand) {
+                    if(newValue==null||newValue.isEmpty())
+                        return true;
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    TableColumn<MusicBand,?> selectedItem = columns.getSelectionModel().getSelectedItem();
+                    return findData(selectedItem,musicBand,lowerCaseFilter);
+                }
             });
         }));
         leftSide.getChildren().addAll(username, tabs, pane);
@@ -567,6 +584,8 @@ public class InterfaceWork extends Work {
     protected synchronized boolean executeCommand(Meta meta) {
         if (!meta.isSuccessful())
             return true;
+        if(!communicator.isOpened())
+            return false;
         if (meta.getName().equals(new Show().getName())) {
             try {
                 communicator.communicatorSend(new Show().getMeta());
@@ -645,6 +664,8 @@ public class InterfaceWork extends Work {
     private void changeLanguage(Language language) {
         TextBubble.locale.set(language);
         ResourceBundle words = ResourceBundle.getBundle("GUILocale", language.getLocale());
+        table.setText(words.getString("Table"));
+        graphics.setText(words.getString("Graphics"));
         addButton.setText(words.getString("Add"));
         addIfMaxButton.setText(words.getString("Add if max"));
         removeButton.setText(words.getString("Remove"));

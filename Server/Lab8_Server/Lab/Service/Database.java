@@ -38,7 +38,7 @@ public class Database implements  AutoCloseable{
 
     public static boolean authorize(String username, String password){
         try{
-            DriverManager.getConnection("jdbc:postgresql://pg/studs",
+            DriverManager.getConnection("jdbc:postgresql://localhost:15683/MusicBands",
                     username, password);
             Database.username= username;
             Database.password=password;
@@ -54,40 +54,40 @@ public class Database implements  AutoCloseable{
         try{
             Class.forName("org.postgresql.Driver");
             logger.info("Подключаемся к базе");
-            connection=DriverManager.getConnection("jdbc:postgresql://pg/studs",
+            connection=DriverManager.getConnection("jdbc:postgresql://localhost:15683/MusicBands",
                     username, password);
             logger.info("Подключение к базе получено");
-            upload=connection.prepareStatement("SELECT * FROM ((MusicBands INNER " +
-                    "JOIN Coordinates USING(music_band_id))" +
-                    " LEFT JOIN Albums USING (music_band_id))"+
-                    "LEFT JOIN Owners USING (music_band_id)");
-            addBand=connection.prepareStatement("INSERT INTO MusicBands VALUES(" +
-                    "nextval('Assign_id'),?," +
+            upload=connection.prepareStatement("SELECT * FROM ((public.\"MusicBands\" INNER " +
+                    "JOIN public.\"Coordinates\" USING(music_band_id))" +
+                    " LEFT JOIN public.\"Albums\" USING (music_band_id))"+
+                    "LEFT JOIN public.\"Owners\" USING (music_band_id)");
+            addBand=connection.prepareStatement("INSERT INTO public.\"MusicBands\" VALUES(" +
+                    "nextval('public.\"Assign_id\"'),?," +
                     "TO_DATE(?,'DD.MM.YYYY'),?,?,TO_DATE(?,'DD.MM.YYYY'),?::music_genre)");
-            addCoordinates = connection.prepareStatement("INSERT INTO Coordinates " +
-                    "VALUES(currval('Assign_id'),?,?)");
-            addAlbum = connection.prepareStatement("INSERT INTO Albums " +
-                    "VALUES(currval('Assign_id'),?,?)");
-            addOwner =connection.prepareStatement("INSERT INTO Owners " +
-                    "VALUES(currval('Assign_id'),?)");
-            removeBand = connection.prepareStatement("DELETE FROM MusicBands " +
+            addCoordinates = connection.prepareStatement("INSERT INTO public.\"Coordinates\"" +
+                    "VALUES(currval('public.\"Assign_id\"'),?,?)");
+            addAlbum = connection.prepareStatement("INSERT INTO public.\"Albums\"" +
+                    "VALUES(currval('public.\"Assign_id\"'),?,?)");
+            addOwner =connection.prepareStatement("INSERT INTO public.\"Owners\"" +
+                    "VALUES(currval('public.\"Assign_id\"'),?)");
+            removeBand = connection.prepareStatement("DELETE FROM public.\"MusicBands\" " +
                     "WHERE music_band_id=?");
-            removeCoordinates = connection.prepareStatement("DELETE FROM Coordinates " +
+            removeCoordinates = connection.prepareStatement("DELETE FROM public.\"Coordinates\"" +
                     "WHERE music_band_id=?");
-            removeAlbum = connection.prepareStatement("DELETE FROM Albums " +
+            removeAlbum = connection.prepareStatement("DELETE FROM public.\"Albums\"" +
                     "WHERE music_band_id=?");
-            removeOwner = connection.prepareStatement("DELETE FROM Owners " +
+            removeOwner = connection.prepareStatement("DELETE FROM public.\"Owners\"" +
                     "WHERE music_band_id=?");
-            listIds = connection.prepareStatement("SELECT music_band_id FROM Owners " +
+            listIds = connection.prepareStatement("SELECT music_band_id FROM public.\"Owners\"" +
                     "WHERE username = ?");
-            getId = connection.prepareStatement("SELECT currval('Assign_id')");
-            updateBand = connection.prepareStatement("UPDATE MusicBands " +
+            getId = connection.prepareStatement("SELECT currval('public.\"Assign_id\"')");
+            updateBand = connection.prepareStatement("UPDATE public.\"MusicBands\" " +
                     "SET name=?,number_of_participants=?,albums_count=?," +
                     "establishment_date=TO_DATE(?,'DD.MM.YYYY'),genre=?::music_genre " +
                     "WHERE music_band_id=?");
-            updateCoordinates = connection.prepareStatement("UPDATE Coordinates " +
+            updateCoordinates = connection.prepareStatement("UPDATE public.\"Coordinates\" " +
                     "SET x=?,y=? WHERE music_band_id=?");
-            updateAlbum = connection.prepareStatement("UPDATE Albums " +
+            updateAlbum = connection.prepareStatement("UPDATE public.\"Albums\" " +
                     "SET album_name=?,length=? WHERE music_band_id=?");
             logger.info("Установлено соединение с базой данных");
         }

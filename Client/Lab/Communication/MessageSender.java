@@ -14,7 +14,7 @@ class MessageSender {
     void sendMessage(MessageFormer mf) throws IOException{
         message=mf.message;
             byte[] buffer = new byte[100];
-            SocketAddress address = new InetSocketAddress("localhost",14087);
+            SocketAddress address = new InetSocketAddress(InetAddress.getByName("192.168.43.120"),14087);
             DatagramPacket packet;
             while(message.length>0){
                 if(message.length>100){

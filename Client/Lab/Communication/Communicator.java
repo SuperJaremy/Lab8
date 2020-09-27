@@ -38,4 +38,7 @@ public class Communicator {
         else
             throw new SocketException("Port is closed");
     }
+    public boolean isOpened(){
+        return isOpened;
+    }
 }
